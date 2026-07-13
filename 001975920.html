@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>無人航空機飛行マニュアル（航空局標準マニュアル②）</title>
+<style>
+  :root{
+    --accent:#25364A; --accent-light:#EEF2E4; --border:#C8CEC0; --text:#2D3325;
+    --muted:#72786B; --label:#3A4032; --bg:#F5F3EC; --white:#fff; --radius:8px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;
+    background:var(--bg);color:var(--text);font-size:15px;line-height:1.8;min-height:100vh;
+    -webkit-text-size-adjust:100%;
+  }
+  .sticky-zone{position:sticky;top:0;z-index:100;}
+  .site-header{background:var(--accent);color:#fff;padding:5px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .site-header h1{font-size:14px;font-weight:700;letter-spacing:.03em;}
+  .site-header a.home{color:rgba(255,255,255,.85);text-decoration:none;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.12);white-space:nowrap;}
+  .site-header a.home:hover{color:#fff;background:rgba(255,255,255,.22);}
+  .breadcrumb{
+    display:flex;align-items:center;gap:6px;background:var(--white);border-bottom:1px solid var(--border);
+    padding:5px 20px;min-height:28px;font-size:12px;overflow:hidden;
+  }
+  .crumb{
+    font:inherit;background:none;border:none;cursor:pointer;color:var(--accent);padding:0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1000 auto;min-width:2.2em;text-align:left;
+  }
+  .crumb:hover{text-decoration:underline;}
+  .crumb:last-child{flex:0 1 auto;min-width:0;color:var(--label);font-weight:700;}
+  .crumb-sep{flex-shrink:0;color:var(--muted);}
+  .container{max-width:900px;margin:0 auto;padding:24px 16px 80px;}
+  .doc-meta{font-size:13px;color:var(--muted);margin:0 0 14px;}
+  .hint{font-size:12px;color:var(--muted);margin:0 2px 10px;}
+  .controls{display:flex;gap:10px;margin-left:auto;}
+  .controls button{
+    font:inherit;font-size:11px;font-weight:700;color:var(--accent);background:var(--white);
+    border:1px solid var(--border);border-radius:999px;padding:2px 14px;cursor:pointer;
+  }
+  .controls button:hover{background:var(--accent-light);}
+  .ch-head,.sec-head,.item-head{scroll-margin-top:calc(var(--sticky-h,64px) + 6px);}
+  .accordion{display:flex;flex-direction:column;gap:10px;}
+  .chapter{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .ch-head{
+    width:100%;text-align:left;background:transparent;color:var(--accent);border:none;cursor:pointer;
+    font:inherit;font-weight:700;font-size:16px;letter-spacing:.02em;padding:15px 18px;
+    display:flex;align-items:center;gap:10px;min-height:52px;
+  }
+  .ch-head:hover{color:#3a5168;}
+  .ch-head::before{content:"\25B6";font-size:.72em;line-height:1;color:var(--muted);flex-shrink:0;}
+  .ch-head[aria-expanded="true"]::before{content:"\25BC";color:var(--accent);}
+  .ch-head:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
+  .ch-body{display:none;padding:6px 16px 16px;}
+  .ch-head[aria-expanded="true"]+.ch-body{display:block;}
+  .section{border-top:1px solid var(--border);}
+  .section:first-child{border-top:none;}
+  .sec-head{
+    width:100%;text-align:left;background:transparent;color:var(--accent);border:none;cursor:pointer;
+    font:inherit;font-weight:700;font-size:15px;padding:13px 4px;display:flex;align-items:center;gap:9px;min-height:46px;
+  }
+  .sec-head:hover{color:#3a5168;}
+  .sec-head::before{content:"\25B6";font-size:.7em;line-height:1;color:var(--muted);flex-shrink:0;}
+  .sec-head[aria-expanded="true"]::before{content:"\25BC";color:var(--accent);}
+  .sec-head:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
+  .sec-body{display:none;padding:2px 4px 16px;}
+  .sec-head[aria-expanded="true"]+.sec-body{display:block;}
+  .item{margin:10px 0 0;}
+  .item:first-child{margin-top:4px;}
+  .item-head{
+    width:100%;text-align:left;background:transparent;color:var(--label);border:none;cursor:pointer;
+    font:inherit;font-weight:700;font-size:14.5px;padding:8px 4px 8px 12px;display:flex;align-items:center;gap:8px;
+    border-bottom:1px solid var(--border);min-height:40px;
+  }
+  .item-head:hover{color:#3a5168;}
+  .item-head::before{content:"\25B6";font-size:.62em;line-height:1;color:var(--muted);flex-shrink:0;}
+  .item-head[aria-expanded="true"]::before{content:"\25BC";color:var(--accent);}
+  .item-head:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
+  .item-body{display:none;padding:6px 4px 14px 20px;}
+  .item-head[aria-expanded="true"]+.item-body{display:block;}
+  .pp{margin:8px 0;text-indent:1em;}
+  .cover-line{margin:6px 0;}
+  .table-wrap{overflow-x:auto;margin:12px 0;}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:320px;}
+  th,td{border:1px solid var(--border);padding:7px 9px;text-align:left;vertical-align:top;}
+  th{background:var(--accent-light);color:var(--label);font-weight:700;}
+  ul{list-style:none;margin:6px 0;}
+  li{margin:4px 0;}
+
+  @media (max-width:560px){
+    body{font-size:14px;}
+    .site-header{padding:4px 14px;gap:8px;}
+    .site-header h1{font-size:12.5px;}
+    .controls{gap:8px;}
+    .controls button{font-size:10px;padding:2px 10px;}
+    .breadcrumb{padding:4px 14px;min-height:24px;font-size:11px;}
+    .ch-head{font-size:15px;padding:14px 14px;}
+    .sec-head{font-size:14px;}
+    .item-head{font-size:13.5px;padding:7px 4px 7px 10px;}
+    .container{padding:18px 12px 70px;}
+    table{font-size:12.5px;}
+  }
+  @media print{
+    body{background:#fff;font-size:11pt;}
+    .sticky-zone{position:static;}
+    .site-header{background:#fff;color:#000;border-bottom:2px solid #000;}
+    .breadcrumb{display:none;}
+    .site-header h1{color:#000;}
+    .controls,.hint{display:none;}
+    .chapter{border:none;border-top:1.5px solid #000;border-radius:0;}
+    .ch-body,.sec-body,.item-body{display:block !important;}
+    .ch-head,.sec-head,.item-head{color:#000;cursor:default;}
+    .ch-head::before,.sec-head::before,.item-head::before{content:"";}
+    .table-wrap{overflow:visible;}
+  }
+</style>
+</head>
+<body>
+
+<div class="sticky-zone">
+<header class="site-header">
+  <a class="home" href="index.html">← ホーム</a>
+  <h1>無人航空機飛行マニュアル（航空局標準マニュアル②）</h1>
+  <div class="controls">
+    <button type="button" id="expand-all">すべて展開</button>
+    <button type="button" id="collapse-all">すべて折りたたむ</button>
+  </div>
+</header>
+<nav class="breadcrumb" id="breadcrumb" aria-label="現在位置"></nav>
+</div>
+
+<div class="container">
+
+  <p class="doc-meta">出典:国土交通省『無人航空機飛行マニュアル　国土交通省航空局標準マニュアル②』(令和７年12月26日版)を単一HTMLに変換したもの。目次は除く。</p>
+
+  <p class="hint">▶ をタップすると展開します。同じ階層では一つ開くと他は閉じます(「すべて展開」時を除く)。</p>
+
+    <div class="chapter">
+      <button type="button" class="ch-head" aria-expanded="false">表紙</button>
+      <div class="ch-body">
+        <p class="cover-line">無人航空機</p>
+        <p class="cover-line">飛行マニュアル</p>
+        <p class="cover-line">（DID・夜間・目視外・30m・危険物・物件投下）</p>
+        <p class="cover-line">場所を特定しない申請について適用</p>
+        <p class="cover-line">運航者名：</p>
+        <p class="cover-line">国土交通省航空局標準マニュアル②（令和７年12 月26 日版）</p>
+      </div>
+    </div>
+    <div class="chapter">
+      <button type="button" class="ch-head" aria-expanded="false">本マニュアルについて</button>
+      <div class="ch-body">
+        <p class="pp">本マニュアルは、航空法に基づく許可及び承認を受けて無人航空機を飛行させる際に必要となる手順等を記載するものである。本マニュアルに記載される手順等は、無人航空機の安全な飛行を確保するために少なくとも必要と考えられるものであり、運航者は、本マニュアルの遵守に加え、使用する機体の機能及び性能を十分に理解し、飛行の方法及び場所に応じて生じるおそれがある飛行のリスクを事前に検証した上で、追加的な安全上の措置を講じるなど、無人航空機の飛行の安全に万全を期さなければならない。</p>
+      </div>
+    </div>
+    <div class="chapter">
+      <button type="button" class="ch-head" aria-expanded="false">１．無人航空機の点検・整備</button>
+      <div class="ch-body">
+        <div class="section">
+          <button type="button" class="sec-head" aria-expanded="false">１－１ 機体の点検・整備の方法</button>
+          <div class="sec-body">
+            <p class="pp">「無人航空機の飛行日誌の取扱要領」に基づき、日常点検の項目を以下の通りとし、機体の点検・整備を実施する。</p>
+            <div class="item">
+              <button type="button" class="item-head" aria-expanded="false">（１） 飛行前の点検</button>
+              <div class="item-body">
+                <p class="pp">飛行前には、以下の点について機体の点検を行う。</p>
+                <ul>
+                  <li>・各機器は確実に取り付けられているか（ネジ等の脱落やゆるみ等）</li>
+                  <li>・発動機やモーターに異音はないか</li>
+                  <li>・機体（プロペラ、フレーム等）に損傷やゆがみはないか</li>
+                  <li>・燃料の搭載量又はバッテリーの充電量は十分か</li>
+                  <li>・通信系統、推進系統、電源系統及び自動制御系統は正常に作動するか</li>
+                </ul>
+              </div>
+            </div>
+            <div class="item">
+              <button type="button" class="item-head" aria-expanded="false">（２） 飛行後の点検</button>
+              <div class="item-body">
+                <p class="pp">飛行後には、以下の点について機体の点検を行う。</p>
+                <ul>
+                  <li>・機体にゴミ等の付着はないか</li>
+                  <li>・各機器は確実に取り付けられているか（ネジ等の脱落やゆるみ等）</li>
+                  <li>・機体（プロペラ、フレーム等）に損傷やゆがみはないか</li>
+                  <li>・各機器の異常な発熱はないか</li>
+                </ul>
+              </div>
+            </div>
+            <div class="item">
+              <button type="button" class="item-head" aria-expanded="false">（３） ２０時間の飛行毎に、以下の事項について無人航空機の点検を実施する。</button>
+              <div class="item-body">
+                <ul>
+                  <li>・交換の必要な部品はあるか</li>
+                  <li>・各機器は確実に取り付けられているか（ネジの脱落やゆるみ等）</li>
+                  <li>・機体（プロペラ、フレーム等）に損傷やゆがみはないか</li>
+                  <li>・通信系統、推進系統、電源系統及び自動制御系統は正常に作動するか</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <button type="button" class="sec-head" aria-expanded="false">１－２ 点検・整備記録の作成</button>
+          <div class="sec-body">
+            <p class="pp">   １－１（１）～（３）に定める飛行の前後及び２０時間の飛行毎に無人航空機の点検・整備を行った際には、「無人航空機の飛行日誌の取扱要領」に従い、点検・整備記録を作成し管理する。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chapter">
+      <button type="button" class="ch-head" aria-expanded="false">２．無人航空機を飛行させる者の訓練及び遵守事項</button>
+      <div class="ch-body">
+        <div class="section">
+          <button type="button" class="sec-head" aria-expanded="false">２－１ 無人航空機を飛行させる者の訓練</button>
+          <div class="sec-body">
+            <div class="item">
+              <button type="button" class="item-head" aria-expanded="false">（１） 基本的な操縦技量の習得</button>
+              <div class="item-body">
+                <p class="pp">   プロポの操作に慣れるため、以下の内容の操作が容易にできるようになるまで10 時間以上の操縦練習を実施する。なお、操縦練習の際には、十分な経験を有する者の監督の下に行うものとする。訓練場所は許可等が不要な場所又は訓練のために許可等を受けた場所で行う。</p>
+                <div class="table-wrap">
+                  <table>
+                    <tr>
+                      <th>項 目</th>
+                      <th>内 容</th>
+                    </tr>
+                    <tr>
+                      <td>離着陸</td>
+                      <td>操縦者から３ｍ離れた位置で、３ｍの高さまで離陸し、指定の範囲内に着陸すること。この飛行を５回連続して安定して行うことができること。</td>
+                    </tr>
+                    <tr>
+                      <td>ホバリング</td>
+                      <td>飛行させる者の目線の高さにおいて、一定時間の間、ホバリングにより指定された範囲内（半径１ｍの範囲内）にとどまることができること。</td>
+                    </tr>
+                    <tr>
+                      <td>左右方向の移動</td>
+                      <td>指定された離陸地点から、左右方向に２０ｍ離れた着陸地点に移動し、着陸することができること。この飛行を５回連続して安定して行うことができること。</td>
+                    </tr>
+                    <tr>
+                      <td>前後方向の移動</td>
+                      <td>指定された離陸地点から、前後方向に２０ｍ離れた着陸地点に移動し、着陸することができること。この飛行を５回連続して安定して行うことができること。</td>
+                    </tr>
+                    <tr>
+                      <td>水平面内での飛行</td>
+                      <td>一定の高さを維持したまま、指定された地点を順番に移動することができること。この飛行を５回連続して安定して行うことができること。</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <button type="button" class="item-head" aria-expanded="false">（２） 業務を実施するために必要な操縦技量の習得</button>
+              <div class="item-body">
+                <p class="pp">   基礎的な操縦技量を習得した上で、以下の内容の操作が可能となるよう操縦練習を実施する。訓練場所は許可等が不要な場所又は訓練のために許可等を受けた場所で行う。</p>
+                <div class="table-wrap">
+                  <table>
+                    <tr>
+                      <th>項 目</th>
+                      <th>内 容</th>
+                    </tr>
+                    <tr>
+                      <td>対面飛行</td>
+                      <td>対面飛行により、左右方向の移動、前後方向の移動、水平面内での飛行を円滑に実施できるようにすること。</td>
+                    </tr>
+                    <tr>
+                      <td>飛行の組合</td>
+                      <td>操縦者から１０ｍ離れた地点で、水平飛行と上昇・下降を組み合わせて飛行を５回連続して安定して行うことができること。</td>
+                    </tr>
+                    <tr>
+                      <td>８の字飛行</td>
+                      <td>８の字飛行を５回連続して安定して行うことができること。</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <button type="button" class="item-head" aria-expanded="false">（３） 操縦技量の維持</button>
+              <div class="item-body">
+                <p class="pp">   （１），（２）で定めた操縦技量を維持するため、定期的に操縦練習を行う。訓練場所は許可等が不要な場所又は訓練のために許可等を受けた場所で行う。</p>
+              </div>
+            </div>
+            <div class="item">
+              <button type="button" class="item-head" aria-expanded="false">（４） 夜間における操縦練習</button>
+              <div class="item-body">
+                <p class="pp">   夜間においても、（２）に掲げる操作が安定して行えるよう、訓練のために許可等を受けた場所又は屋内にて練習を行う。</p>
+              </div>
+            </div>
+            <div class="item">
+              <button type="button" class="item-head" aria-expanded="false">（５） 目視外飛行における操縦練習</button>
+              <div class="item-body">
+                <p class="pp">   目視外飛行においても、（２）に掲げる操作が安定して行えるよう、訓練のために許可等を受けた場所又は屋内にて練習を行う。</p>
+              </div>
+            </div>
+            <div class="item">
+              <button type="button" class="item-head" aria-expanded="false">（６） 物件投下のための操縦練習</button>
+              <div class="item-body">
+                <p class="pp">   物件投下の前後で安定した機体の姿勢制御が行えるよう、また、５回以上の物件投下の実績を積むため、訓練のために許可等を受けた場所又は屋内にて練習を行う。</p>
+              </div>
+            </div>
+            <div class="item">
+              <button type="button" class="item-head" aria-expanded="false">（７） 無人航空機操縦者技能証明の保有者</button>
+              <div class="item-body">
+                <p class="pp">   現に有効な無人航空機操縦者技能証明（飛行にあたって必要な限定解除を受けたもの。）の保有者は、操縦技量の維持に努めるものとし、その知識及び能力が適切に確保されている場合にあっては、（１）、（２）、（４）及び（５）の操縦練習を省略することができる。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <button type="button" class="sec-head" aria-expanded="false">２－２ 飛行記録の作成</button>
+          <div class="sec-body">
+            <p class="pp">   無人航空機を飛行させた際には、「無人航空機の飛行日誌の取扱要領」に従い、飛行記録を作成し管理する。</p>
+          </div>
+        </div>
+        <div class="section">
+          <button type="button" class="sec-head" aria-expanded="false">２－３ 無人航空機を飛行させる者が遵守しなければならない事項</button>
+          <div class="sec-body">
+            <p class="pp">（１）第三者に対する危害を防止するため、第三者の上空で無人航空機を飛行させない。</p>
+            <p class="pp">（２）飛行前に、気象、機体の状況及び飛行経路について、安全に飛行できる状態であること、飛行させる場所が緊急用務空域に指定されていないことを確認する。</p>
+            <p class="pp">（３）５ｍ／ｓ以上の突風が発生するなど、無人航空機を安全に飛行させることができなくなるような不測の事態が発生した場合には即時に飛行を中止する。ただし、５ｍ／ｓ以上の突風で飛行可能であることを、製造者等が定める取扱説明書等にて確認している場合は、その条件による。</p>
+            <p class="pp">（４）多数の者が集合する場所の上空を飛行することが判明した場合には即時に飛行を中止する。</p>
+            <p class="pp">（５）アルコール又は薬物の影響により、無人航空機を正常に飛行させることができないおそれがある間は、飛行させない。</p>
+            <p class="pp">（６）飛行の危険を生じるおそれがある区域の上空での飛行は行わない。</p>
+            <p class="pp">（７）飛行前に、航行中の航空機を確認した場合には、飛行させない。</p>
+            <p class="pp">（８）飛行前に、飛行中の他の無人航空機を確認した場合には、飛行日時、飛行経路、飛行高度等について、他の無人航空機を飛行させる者と調整を行う。</p>
+            <p class="pp">（９）飛行中に、航行中の航空機を確認した場合には、着陸させるなど接近又は衝突を回避させる。</p>
+            <p class="pp">（10）飛行中に、飛行中の他の無人航空機を確認した場合には、当該無人航空機との間に安全な間隔を確保して飛行させる。その他衝突のおそれがあると認められる場合は、着陸させるなど接近又は衝突を回避させ、飛行日時、飛行経路、飛行高度等について、他の無人航空機を飛行させる者と調整を行う。</p>
+            <p class="pp">（11）不必要な低空飛行、高調音を発する飛行、急降下など、他人に迷惑を及ぼすような飛行を行わない。</p>
+            <p class="pp">（12）物件のつり下げ又は曳航を行う場合は、飛行距離及び高度の限界値を設定して不必要な飛行を行わないようにし、突風や電波障害等の不測の事態を考慮して当該場所の付近（近隣）の第三者や物件への影響を予め現地で確認・評価し、補助者の増員等を行う。</p>
+            <p class="pp">（13）十分な視程が確保できない雲や霧の中では飛行させない。</p>
+            <p class="pp">（14）「無人航空機の飛行日誌の取扱要領」に従い、定期的に機体の点検・整備を行うとともに、点検・整備記録を作成する。</p>
+            <p class="pp">（15）「無人航空機の飛行計画の通報要領」に従い、あらかじめドローン情報基盤システム（飛行計画通報機能）を用いて飛行計画を通報する。また、飛行経路に係る他の無人航空機の飛行計画の情報について当該システムを用いて確認する。</p>
+            <p class="pp">（16）「無人航空機の飛行日誌の取扱要領」に従い、飛行の都度、飛行の実績を記録する。</p>
+            <p class="pp">（17）「無人航空機の事故及び重大インシデントの報告要領」に定める事態が発生した場合には、当該要領に基づき、許可等を受けた飛行に関してはこれを許可等した官署に対し、また、許可等を受けていない飛行に関しては飛行経路を管轄する官署に対し、ドローン情報基盤システム（事故等報告機能）を用いて速やかに報告する。</p>
+            <p class="pp">（18）負傷者の救護が必要な事態が発生した場合は、直ちに無人航空機の飛行を中止し、「無人航空機の事故及び重大インシデントの報告要領」に示す救護措置を行う。</p>
+            <p class="pp">（19）飛行の際には、無人航空機を飛行させる者は許可証又は承認書を原本又は写しを携行する。なお、電子データの携帯でも可とする。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chapter">
+      <button type="button" class="ch-head" aria-expanded="false">３．安全を確保するために必要な体制</button>
+      <div class="ch-body">
+        <div class="section">
+          <button type="button" class="sec-head" aria-expanded="false">３－１ 無人航空機を飛行させる際の基本的な体制</button>
+          <div class="sec-body">
+            <p class="pp">（１）場所の確保・周辺状況を十分に確認し、第三者の上空では飛行させない。万が一、飛行範囲への第三者の立入があった際は、飛行の中止等の措置を行う。</p>
+            <p class="pp">（２）風速５ｍ／ｓ以上の状態では飛行させない。ただし、風速５ｍ／ｓ以上の状態で飛行可能であることを、製造者等が定める取扱説明書等にて確認している場合は、その条件による。</p>
+            <p class="pp">（３）雨の場合や雨になりそうな場合は飛行させない。ただし、雨でも飛行可能であることを、製造者等が定める取扱説明書等にて確認している場合はその限りではない。</p>
+            <p class="pp">（４）十分な視程が確保できない雲や霧の中では飛行させない。</p>
+            <p class="pp">（５）飛行させる際には、安全を確保するために必要な人数の補助者を配置し、相互に安全確認を行う体制をとる。なお、塀やフェンス等を設置することや、第三者の立入りを制限する旨の看板やコーン等を飛行範囲や周辺環境に応じて設置することにより立入管理区画を明示し、第三者の立入りを確実に制限することができる場合は、これを補助者の配置に代えることができる。</p>
+            <p class="pp">（６）補助者は、飛行範囲に第三者が立ち入らないよう注意喚起を行う。</p>
+            <p class="pp">（７）補助者は、飛行経路全体を見渡せる位置において、無人航空機の飛行状況及び周囲の気象状況の変化等を常に監視し、操縦者が安全に飛行させることができるよう必要な助言を行う。</p>
+            <p class="pp">（８）ヘリコプターなどの離発着が行われ、航行中の航空機に衝突する可能性があるような場所では飛行させない。</p>
+            <p class="pp">（９）第三者の往来が多い場所や学校、病院、神社仏閣、観光施設などの不特定多数の人が集まる場所の上空やその付近は飛行させない。ただし、当該施設から飛行の依頼があった場合は、休校日、休診日、早朝など第三者が往来する可能性が低い時間帯とし、飛行経路を当該施設内に限定した上で、一定の広さのある場所を飛行させるものとする。また、経路下における第三者の立ち入りについて制限を行い、第三者の立ち入り等が生じた場合は、速やかに飛行を中止するほか、突風などを考慮して当該場所の付近（近隣）の第三者や物件への影響を予め現地で確認・評価し、補助者の増員等を行う。</p>
+            <p class="pp">（10）高速道路、交通量が多い一般道、鉄道の上空やその付近では飛行させない。</p>
+            <p class="pp">（11）高圧線、変電所、電波塔、無線施設などの施設上空及び付近では飛行させない。ただし、高圧線、変電所、電波塔、無線施設などの施設点検等の業務として飛行が必要な場合は、飛行範囲を限定し、不必要な飛行をさせないようにする。さらに、一定の広さのある場所を飛行させるとともに、経路下における第三者の立ち入りについて制限を行い、第三者の立ち入り等が生じた場合は、速やかに飛行を中止する。また、突風、電波障害など不測の事態を考慮して当該場所の付近（近隣）の第三者や物件への影響を予め現地で確認・評価し、補助者の増員等を行う。</p>
+            <p class="pp">（12）飛行場所付近の人又は物件への影響をあらかじめ現地で確認・評価し、補助員の増員等を行う。</p>
+            <p class="pp">（13）人又は物件との距離が30ｍ以上確保できる離発着場所を可能な限り選定するとともに、周辺の第三者の立ち入りを制限できる範囲で飛行経路を選定する。</p>
+            <p class="pp">（14）飛行場所に第三者の立ち入り等が生じた場合には速やかに飛行を中止する。</p>
+            <p class="pp">（15）人又は家屋が密集している地域の上空では夜間飛行は行わない。</p>
+            <p class="pp">（16）人又は家屋が密集している地域の上空では目視外飛行は行わない。ただし、業務上、やむを得ず飛行が必要な場合は、常時操縦者と連絡を取り合うことができる補助者の配置を必須とし、飛行範囲を限定して不必要な飛行をさせないようにする。さらに、一定の広さのある場所を飛行させるとともに、経路下における第三者の立ち入りについて制限を行い、第三者の立ち入り等が生じた場合は、速やかに飛行を中止する。また、突風などを考慮して当該場所の付近（近隣）の第三者や物件への影響を予め現地で確認・評価し、補助者の増員等を行う。</p>
+            <p class="pp">（17）夜間の目視外飛行は行わない。</p>
+            <p class="pp">※３－１に加え、飛行の形態に応じ、３－２から３－５の各項目に記載される必要な体制を適切に実行すること。</p>
+          </div>
+        </div>
+        <div class="section">
+          <button type="button" class="sec-head" aria-expanded="false">３－２ 人又は家屋の密集している地域の上空における飛行又は地上又は水上の人又は物件との間に30ｍの距離を保てない飛行を行う際の体制</button>
+          <div class="sec-body">
+            <p class="pp">（１）飛行させる無人航空機について、プロペラガードを装備して飛行させる。装備できない場合は、第三者が飛行経路下に入らないように監視及び注意喚起をする補助者を必ず配置し、万が一第三者が飛行経路下に接近又は進入した場合は操縦者に適切に助言を行い、飛行を中止する等適切な安全措置をとる。３－１（５）に示す飛行範囲への第三者の立入管理措置を行う場合には、補助者の配置に代えることができる。</p>
+            <p class="pp">（２）無人航空機の飛行について、補助者が周囲に周知を行う。</p>
+          </div>
+        </div>
+        <div class="section">
+          <button type="button" class="sec-head" aria-expanded="false">３－３ 夜間飛行を行う際の体制</button>
+          <div class="sec-body">
+            <p class="pp">（１）夜間飛行においては、目視外飛行は実施せず、機体の向きを視認できる灯火が装備された機体を使用し、機体の灯火が容易に認識できる範囲内での飛行に限定する。</p>
+            <p class="pp">（２）日中、飛行させようとする経路及びその周辺の障害物件等を事前に確認し、適切な飛行経路を選定する。</p>
+            <p class="pp">（３）操縦者は、夜間飛行の訓練を修了した者に限る。</p>
+            <p class="pp">（４）補助者についても、飛行させている無人航空機の特性を十分理解させておくこと。３－１（５）に示す第三者の立入管理措置等を適切に講じることにより、補助者の配置に代えることができる。</p>
+            <p class="pp">（５）夜間の離発着場所において車のヘッドライトや撮影用照明機材等で機体離発着場所に十分な照明を確保する。</p>
+          </div>
+        </div>
+        <div class="section">
+          <button type="button" class="sec-head" aria-expanded="false">３－４ 目視外飛行を行う際の体制</button>
+          <div class="sec-body">
+            <p class="pp">（１）飛行の前には、飛行ルート下に第三者がいないことを確認し、双眼鏡等を有する補助者のもと、目視外飛行を実施する</p>
+            <p class="pp">（２）操縦者は、目視外飛行の訓練を修了した者に限る。</p>
+            <p class="pp">（３）補助者についても、飛行させている無人航空機の特性を十分理解させておくこと。３－１（５）に示す飛行範囲への第三者の立入管理措置を行う場合には、補助者の配置に代えることができる。</p>
+          </div>
+        </div>
+        <div class="section">
+          <button type="button" class="sec-head" aria-expanded="false">３－５ 危険物の輸送を行う際又は物件投下を行う際の体制</button>
+          <div class="sec-body">
+            <p class="pp">（１）３－１に基づき補助者を適切に配置し飛行させる。３－１（５）に示す飛行範囲への第三者の立入管理措置を行う場合には、補助者の配置に代えることができる。</p>
+            <p class="pp">（２）危険物の輸送の場合、危険物の取扱いは、関連法令等に基づき安全に行う。</p>
+            <p class="pp">（３）物件投下の場合、操縦者は、物件投下の訓練を修了した者に限る。</p>
+          </div>
+        </div>
+        <div class="section">
+          <button type="button" class="sec-head" aria-expanded="false">３－６ 非常時の連絡体制</button>
+          <div class="sec-body">
+            <p class="pp">あらかじめ、飛行の場所を管轄する警察署、消防署等の連絡先を調べ、２－３（17）に掲げる事態が発生した際には、必要に応じて直ちに警察署、消防署、その他必要な機関等へ連絡するとともに、国土交通省ホームページに掲載されている別表：無人航空機による事故等の情報提供先一覧のとおり許可等を行った国土交通省航空局安全部無人航空機安全課、地方航空局保安部運航課又は空港事務所まで報告する。なお、夜間等の執務時間外における報告については、24 時間運用されている空港事務所に電話で連絡を行う。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var stickyZone = document.querySelector(".sticky-zone");
+  function updateStickyOffset(){
+    document.documentElement.style.setProperty("--sticky-h", stickyZone.offsetHeight + "px");
+  }
+  updateStickyOffset();
+  function closeItem(head){
+    head.setAttribute("aria-expanded","false");
+  }
+  function closeSection(head){
+    head.setAttribute("aria-expanded","false");
+    var body = head.nextElementSibling;
+    if(body){
+      body.querySelectorAll(".item-head").forEach(closeItem);
+    }
+  }
+  function closeChapter(head){
+    head.setAttribute("aria-expanded","false");
+    var body = head.nextElementSibling;
+    if(body){
+      body.querySelectorAll(".sec-head").forEach(closeSection);
+    }
+  }
+  function toggleChapter(head){
+    var willOpen = head.getAttribute("aria-expanded") !== "true";
+    if(willOpen){
+      document.querySelectorAll(".ch-head").forEach(closeChapter);
+      head.setAttribute("aria-expanded","true");
+    }else{
+      closeChapter(head);
+    }
+  }
+  function toggleSection(head){
+    var willOpen = head.getAttribute("aria-expanded") !== "true";
+    if(willOpen){
+      var chBody = head.closest(".ch-body");
+      if(chBody){
+        chBody.querySelectorAll(".sec-head").forEach(closeSection);
+      }
+      head.setAttribute("aria-expanded","true");
+    }else{
+      closeSection(head);
+    }
+  }
+  function toggleItem(head){
+    var willOpen = head.getAttribute("aria-expanded") !== "true";
+    if(willOpen){
+      var secBody = head.closest(".sec-body");
+      if(secBody){
+        secBody.querySelectorAll(".item-head").forEach(closeItem);
+      }
+      head.setAttribute("aria-expanded","true");
+    }else{
+      closeItem(head);
+    }
+  }
+  document.querySelectorAll(".ch-head").forEach(function(btn){
+    btn.addEventListener("click", function(){ toggleChapter(btn); });
+  });
+  document.querySelectorAll(".sec-head").forEach(function(btn){
+    btn.addEventListener("click", function(){ toggleSection(btn); });
+  });
+  document.querySelectorAll(".item-head").forEach(function(btn){
+    btn.addEventListener("click", function(){ toggleItem(btn); });
+  });
+  document.getElementById("expand-all").addEventListener("click", function(){
+    document.querySelectorAll(".ch-head,.sec-head,.item-head").forEach(function(b){
+      b.setAttribute("aria-expanded","true");
+    });
+  });
+  document.getElementById("collapse-all").addEventListener("click", function(){
+    document.querySelectorAll(".ch-head").forEach(closeChapter);
+  });
+
+  /* ---- パンくずリスト（開いている階層のフルパスを表示） ---- */
+  var breadcrumbNav = document.getElementById("breadcrumb");
+  var bodySelector = ".ch-body,.sec-body,.item-body";
+  var allHeads = Array.prototype.slice.call(
+    document.querySelectorAll(".ch-head,.sec-head,.item-head")
+  );
+  var parentOf = new Map();
+  var childrenOf = new Map();
+  var rootHeads = [];
+  allHeads.forEach(function(head){
+    var body = head.parentElement.closest(bodySelector);
+    var parent = body ? body.previousElementSibling : null;
+    parentOf.set(head, parent);
+    if(parent){
+      if(!childrenOf.has(parent)){ childrenOf.set(parent, []); }
+      childrenOf.get(parent).push(head);
+    }else{
+      rootHeads.push(head);
+    }
+  });
+  function isOpen(head){ return head.getAttribute("aria-expanded") === "true"; }
+  function openChain(){
+    var chain = [];
+    var candidates = rootHeads;
+    while(true){
+      var open = candidates.filter(isOpen);
+      if(open.length !== 1){ break; }
+      chain.push(open[0]);
+      candidates = childrenOf.get(open[0]) || [];
+    }
+    return chain;
+  }
+  function updateBreadcrumb(){
+    var chain = openChain();
+    breadcrumbNav.textContent = "";
+    chain.forEach(function(target, idx){
+      if(idx > 0){
+        var sep = document.createElement("span");
+        sep.className = "crumb-sep";
+        sep.textContent = "\u203a";
+        breadcrumbNav.appendChild(sep);
+      }
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "crumb";
+      btn.textContent = target.textContent;
+      btn.addEventListener("click", function(){
+        target.scrollIntoView({behavior:"smooth", block:"start"});
+      });
+      breadcrumbNav.appendChild(btn);
+    });
+  }
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest ? e.target.closest("button") : null;
+    if(!btn || btn.classList.contains("crumb")){ return; }
+    updateStickyOffset();
+    updateBreadcrumb();
+  });
+  window.addEventListener("resize", updateStickyOffset);
+  window.addEventListener("load", updateStickyOffset);
+  updateBreadcrumb();
+})();
+</script>
+
+</body>
+</html>
