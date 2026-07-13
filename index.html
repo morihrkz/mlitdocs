@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>各種文書</title>
+<style>
+  :root{
+    --accent:#25364A; --accent-light:#EEF2E4; --border:#C8CEC0; --text:#2D3325;
+    --muted:#72786B; --label:#3A4032; --bg:#F5F3EC; --white:#fff; --radius:8px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;
+    background:var(--bg);color:var(--text);font-size:15px;line-height:1.8;min-height:100vh;
+    -webkit-text-size-adjust:100%;
+  }
+  .site-header{background:var(--accent);color:#fff;padding:5px 20px;display:flex;align-items:center;}
+  .site-header h1{font-size:14px;font-weight:700;letter-spacing:.03em;}
+  .container{max-width:900px;margin:0 auto;padding:24px 16px 80px;}
+  .doc-meta{font-size:13px;color:var(--muted);margin:0 0 20px;}
+  .doc-list{display:flex;flex-direction:column;gap:10px;}
+  .doc-card{
+    display:block;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+    padding:16px 18px;text-decoration:none;color:var(--accent);
+  }
+  .doc-card:hover{background:var(--accent-light);}
+  .doc-card .doc-title{font-weight:700;font-size:15.5px;}
+  .doc-card .doc-desc{margin-top:4px;font-size:12.5px;color:var(--muted);}
+
+  @media (max-width:560px){
+    body{font-size:14px;}
+    .site-header{padding:4px 14px;}
+    .site-header h1{font-size:12.5px;}
+    .container{padding:18px 12px 70px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>各種文書</h1>
+</header>
+
+<div class="container">
+
+  <p class="doc-meta">閲覧したい文書を選んでください。</p>
+
+  <div class="doc-list">
+    <a class="doc-card" href="kyousoku_v5.html">
+      <div class="doc-title">無人航空機の飛行の安全に関する教則（第５版）</div>
+      <div class="doc-desc">kyousoku_v5.html</div>
+    </a>
+  </div>
+
+</div>
+
+</body>
+</html>
