@@ -18,6 +18,8 @@
   .sticky-zone{position:sticky;top:0;z-index:100;}
   .site-header{background:var(--accent);color:#fff;padding:5px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
   .site-header h1{font-size:14px;font-weight:700;letter-spacing:.03em;}
+  .site-header a.home{color:rgba(255,255,255,.85);text-decoration:none;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.12);white-space:nowrap;}
+  .site-header a.home:hover{color:#fff;background:rgba(255,255,255,.22);}
   .breadcrumb{
     display:flex;align-items:center;gap:6px;background:var(--white);border-bottom:1px solid var(--border);
     padding:5px 20px;min-height:28px;font-size:12px;overflow:hidden;
@@ -124,7 +126,6 @@
   .li-b{margin:6px 0 6px 14px;padding-left:1.4em;text-indent:-1.4em;}
   .li-c{margin:4px 0 4px 26px;padding-left:1em;text-indent:-1em;}
   .note-p{margin:8px 0;font-size:13.5px;color:var(--muted);}
-  .muted{color:var(--muted);}
   .cover-line{margin:6px 0;}
   .fig-note{
     background:var(--accent-light);border-left:4px solid #9DB87C;border-radius:4px;
@@ -176,6 +177,7 @@
 
 <div class="sticky-zone">
 <header class="site-header">
+  <a class="home" href="index.html">← ホーム</a>
   <h1>無人航空機の飛行の安全に関する教則（第５版）</h1>
   <div class="controls">
     <button type="button" id="expand-all">すべて展開</button>
